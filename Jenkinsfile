@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        function_name = 'java-test-lambda'
+        function_name = 'nithulambda'
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 echo 'Push'
 
-                sh "aws s3 cp target/sample-1.0.3.jar s3://java-test-lambda"
+                sh "aws s3 cp target/sample-1.0.3.jar s3://nitu123s3"
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 echo 'Build'
 
-                sh "aws lambda update-function-code --function-name $function_name --s3-bucket java-test-lambda --s3-key sample-1.0.3.jar"
+                sh "aws lambda update-function-code --function-name $function_name --s3-bucket nitu123s3 --s3-key sample-1.0.3.jar"
             }
         }
     }
