@@ -1,18 +1,45 @@
 pipeline {
     agent any
-
-    environment {
-        function_name = 'nithulambda'
-    }
-
     stages {
+
+        // CI Start
         stage('Build') {
             steps {
-                echo 'Building'
+                echo 'Build'
                 sh 'mvn package'
             }
         }
-        
+
+
+        stage("SonarQube analysis") {
+            agent any
+            when {
+                anyOf {
+                    branch 'feature/*'
+                    branch 'main'
+                }
+            }
+            steps {
+                withSonarQubeEnv('Sonar') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                script {
+                    try {
+                        timeout(time: 10, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                    catch (Exception ex) {
+
+                    }
+                }
+            }
+        }
 
         stage('Push') {
             steps {
@@ -20,10 +47,33 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Build'
+        // Ci Ended
+
+        // CD Started
+
+        stage('Deployments') {
+            parallel {
+
+                stage('Deploy to Dev') {
+                    steps {
+                        echo 'Build'
+                      }
+                }
+
+                stage('Deploy to test ') {
+                    when {
+                        branch 'main'
+                    }
+                    steps {
+                        echo 'Build'
+                    }
+                }
             }
         }
+
+
+        
+
+        // CD Ended
     }
 }
