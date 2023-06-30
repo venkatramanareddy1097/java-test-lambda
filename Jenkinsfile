@@ -10,7 +10,6 @@ pipeline {
             }
         }
 
-
         stage("SonarQube analysis") {
             agent any
             when {
@@ -25,7 +24,6 @@ pipeline {
                 }
             }
         }
-
         stage("Quality Gate") {
             steps {
                 script {
@@ -40,7 +38,6 @@ pipeline {
                 }
             }
         }
-
         stage('Push') {
             steps {
                 echo 'Push'
@@ -51,29 +48,23 @@ pipeline {
 
         // CD Started
 
-        stage('Deployments') {
-            parallel {
-
-                stage('Deploy to Dev') {
-                    steps {
-                        echo 'Build'
-                      }
-                }
-
-                stage('Deploy to test ') {
-                    when {
-                        branch 'main'
-                    }
-                    steps {
-                        echo 'Build'
-                    }
-                }
+       
+        stage('Deploy to Dev') {
+            steps {
+                echo 'Build'
             }
         }
 
-
-        
-
-        // CD Ended
+        stage('Deploy to test ') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Build'
+            }
+        }
+            
     }
+        // CD Ended
 }
+
