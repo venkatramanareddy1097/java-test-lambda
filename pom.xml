@@ -19,6 +19,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<sonar.organization>enariya0410</sonar.organization>
+		<sonar.projectName>sample</sonar.projectName>
 	</properties>
 	<dependencies>
 	  <dependency>
